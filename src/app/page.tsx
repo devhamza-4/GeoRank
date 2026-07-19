@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -15,9 +16,15 @@ export default function Home() {
     }, 800);
   };
 
+  const fadeInUp = {
+    initial: { opacity: 0, y: 24 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-blue-500/30 selection:text-blue-300">
-      {/* Background Subtle Gradient Glow */}
+      {/* Background Glow */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute -top-[40%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-gradient-to-b from-blue-600/15 via-indigo-500/10 to-transparent blur-[120px] rounded-full" />
       </div>
@@ -63,30 +70,54 @@ export default function Home() {
           className="w-full max-w-4xl px-6 pt-24 pb-20 text-center flex flex-col items-center"
         >
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold tracking-wide uppercase mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold tracking-wide uppercase mb-8"
+          >
             <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
             Generative Engine Optimization (GEO)
-          </div>
+          </motion.div>
 
           {/* Headline */}
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white max-w-3xl leading-[1.15]">
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white max-w-3xl leading-[1.15]"
+          >
             Is your brand visible in{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400">
               AI search?
             </span>
-          </h1>
+          </motion.h1>
 
           {/* Sub-headline */}
-          <p className="mt-6 text-lg sm:text-xl text-zinc-400 max-w-2xl font-normal leading-relaxed">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-6 text-lg sm:text-xl text-zinc-400 max-w-2xl font-normal leading-relaxed"
+          >
             Track and improve your brand&apos;s visibility in ChatGPT, Perplexity, and Gemini.
-          </p>
+          </motion.p>
 
           {/* Waitlist Form */}
-          <div className="mt-10 w-full max-w-md">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-10 w-full max-w-md"
+          >
             {status === "success" ? (
-              <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-sm font-medium flex items-center justify-center gap-2">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-sm font-medium flex items-center justify-center gap-2"
+              >
                 <span>✨</span> Thank you for joining! You&apos;re on the early access priority list.
-              </div>
+              </motion.div>
             ) : (
               <form
                 onSubmit={handleSubmit}
@@ -125,26 +156,39 @@ export default function Home() {
             <p className="mt-3 text-xs text-zinc-500">
               Free early access. No credit card required.
             </p>
-          </div>
+          </motion.div>
 
           {/* Supported AI Search Engines */}
-          <div id="engines" className="mt-20 pt-12 border-t border-zinc-900 w-full">
+          <motion.div
+            id="engines"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.65, ease: "easeOut" }}
+            className="mt-20 pt-12 border-t border-zinc-900 w-full"
+          >
             <p className="text-xs uppercase tracking-widest font-semibold text-zinc-500 mb-6">
               Supported AI Search Platforms
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
               {["ChatGPT", "Perplexity", "Gemini", "Claude", "Microsoft Copilot"].map(
-                (engine) => (
-                  <div
+                (engine, index) => (
+                  <motion.div
                     key={engine}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: 0.7 + index * 0.08,
+                      ease: "easeOut",
+                    }}
                     className="px-4 py-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80 text-zinc-300 text-xs sm:text-sm font-medium hover:border-zinc-700 transition-colors"
                   >
                     {engine}
-                  </div>
+                  </motion.div>
                 )
               )}
             </div>
-          </div>
+          </motion.div>
         </section>
 
         {/* Feature Highlights Section */}
@@ -152,18 +196,30 @@ export default function Home() {
           id="features"
           className="w-full max-w-5xl px-6 py-16 border-t border-zinc-900"
         >
-          <div className="text-center max-w-xl mx-auto mb-14">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-xl mx-auto mb-14"
+          >
             <h2 className="text-2xl sm:text-3xl font-bold text-white">
               Built for the era of AI Search
             </h2>
             <p className="mt-3 text-sm text-zinc-400">
               Traditional SEO is no longer enough. GEOrank gives you full visibility into AI recommendations.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Feature 1 */}
-            <div className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/80 transition-all flex flex-col">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/80 transition-all flex flex-col"
+            >
               <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-lg mb-5">
                 📊
               </div>
@@ -173,10 +229,16 @@ export default function Home() {
               <p className="text-sm text-zinc-400 leading-relaxed">
                 Measure how often your brand is cited when users ask LLMs for products or solutions in your industry.
               </p>
-            </div>
+            </motion.div>
 
             {/* Feature 2 */}
-            <div className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/80 transition-all flex flex-col">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/80 transition-all flex flex-col"
+            >
               <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-lg mb-5">
                 ⚔️
               </div>
@@ -186,10 +248,16 @@ export default function Home() {
               <p className="text-sm text-zinc-400 leading-relaxed">
                 Compare your AI search presence against competitors across ChatGPT, Perplexity, and Gemini.
               </p>
-            </div>
+            </motion.div>
 
             {/* Feature 3 */}
-            <div className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/80 transition-all flex flex-col">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/80 transition-all flex flex-col"
+            >
               <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-lg mb-5">
                 💡
               </div>
@@ -199,7 +267,7 @@ export default function Home() {
               <p className="text-sm text-zinc-400 leading-relaxed">
                 Receive actionable recommendations to format your content so LLM crawlers index and recommend your brand.
               </p>
-            </div>
+            </motion.div>
           </div>
         </section>
       </main>
