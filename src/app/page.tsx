@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { joinWaitlistAction } from "@/app/actions";
 
 const AI_QUERIES = [
   "What is the best platform for AI Search Optimization?",
@@ -12,7 +13,8 @@ const AI_QUERIES = [
 
 export default function Home() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
   const [queryIndex, setQueryIndex] = useState(0);
 
   useEffect(() => {
@@ -22,18 +24,26 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setStatus("loading");
-    setTimeout(() => {
+    setMessage("");
+
+    const res = await joinWaitlistAction(email);
+
+    if (res.success) {
       setStatus("success");
-    }, 600);
+      setMessage(res.message || "Thank you for joining!");
+    } else {
+      setStatus("error");
+      setMessage(res.error || "Failed to join. Please try again.");
+    }
   };
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans selection:bg-blue-500/30 selection:text-blue-300 overflow-x-hidden transform-gpu">
-      {/* Optimized Fast Radial Background Gradient (Zero Heavy GPU Blurs) */}
+      {/* Optimized Fast Radial Background Gradient */}
       <div className="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.18),rgba(255,255,255,0))]" />
 
       {/* Header */}
@@ -119,7 +129,7 @@ export default function Home() {
           >
             {status === "success" ? (
               <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-sm font-medium flex items-center justify-center gap-2">
-                <span>✨</span> Thank you for joining! You&apos;re on the early access priority list.
+                <span>✨</span> {message}
               </div>
             ) : (
               <form
@@ -139,7 +149,7 @@ export default function Home() {
                   disabled={status === "loading"}
                   className="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white text-sm font-semibold transition-all shadow-md shadow-blue-600/25 flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-50"
                 >
-                  {status === "loading" ? "Joining..." : "Join Waitlist"}
+                  {status === "loading" ? "Saving..." : "Join Waitlist"}
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -156,12 +166,19 @@ export default function Home() {
                 </button>
               </form>
             )}
-            <p className="mt-3 text-xs text-zinc-500">
-              Free early access. No credit card required.
-            </p>
+
+            {status === "error" && (
+              <p className="mt-3 text-xs text-red-400 font-medium">{message}</p>
+            )}
+
+            {status !== "error" && (
+              <p className="mt-3 text-xs text-zinc-500">
+                Free early access. No credit card required.
+              </p>
+            )}
           </motion.div>
 
-          {/* Fully Responsive Live AI Search Simulation Box */}
+          {/* Live AI Search Simulation Box */}
           <motion.div
             id="demo"
             initial={{ opacity: 0, y: 20 }}
@@ -204,7 +221,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Responsive AI Result Breakdown Grid (Stacks on mobile) */}
+            {/* Responsive AI Result Breakdown Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-3 border-t border-zinc-800/60">
               <div className="p-2.5 sm:p-3 rounded-xl bg-zinc-950/60 border border-zinc-800/80">
                 <div className="flex items-center justify-between text-xs text-zinc-400 mb-1.5">
